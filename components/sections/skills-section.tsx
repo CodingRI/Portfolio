@@ -13,7 +13,7 @@ export default function SkillsSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Skills Matrix</h2>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Skills Glaxy</h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
             Interactive 3D visualization of my technical expertise. Hover over each skill to see it in action.
           </p>
