@@ -15,6 +15,11 @@ const skillsData = [
     color: "#4a9eff",
     planetColor: "#1a3a5c",
     atmosphereColor: "#1e4080",
+    color2: "#78c4ff",
+    ringColor: "#c86820",
+    moonColor: "",
+    hasMoon: false,
+    visualType: 1,
     tools: ["Python", "SQL", "JavaScript / Node.js"],
     orbitRadius: 2.2,        // innermost
     orbitSpeed: 0.22,        // same speed for all — no catching up
@@ -26,6 +31,11 @@ const skillsData = [
     color: "#3dba7a",
     planetColor: "#0f2e1a",
     atmosphereColor: "#1a5c30",
+    color2: "#5de898",
+    ringColor: "",
+    moonColor: "#7040d0",
+    hasMoon: true,
+    visualType: 0,
     tools: ["FastAPI", "RESTful APIs", "gRPC", "Protocol Buffers", "Microservices"],
     orbitRadius: 2.8,
     orbitSpeed: 0.22,
@@ -37,6 +47,11 @@ const skillsData = [
     color: "#9b6bff",
     planetColor: "#1a0f35",
     atmosphereColor: "#3d1a80",
+    color2: "#c0a0ff",
+    ringColor: "",
+    moonColor: "",
+    hasMoon: false,
+    visualType: 2,
     tools: ["PostgreSQL", "BigQuery", "Firestore", "Elasticsearch", "Redis"],
     orbitRadius: 3.4,
     orbitSpeed: 0.22,
@@ -48,6 +63,11 @@ const skillsData = [
     color: "#e07b3f",
     planetColor: "#2e1508",
     atmosphereColor: "#7a3510",
+    color2: "#ff9e5a",
+    ringColor: "",
+    moonColor: "",
+    hasMoon: false,
+    visualType: 3,
     tools: ["AWS (MWAA, ECS, S3, EC2)", "GCP (Cloud Run)", "Docker", "Terraform", "CI/CD"],
     orbitRadius: 4.0,
     orbitSpeed: 0.22,
@@ -59,6 +79,11 @@ const skillsData = [
     color: "#d4a017",
     planetColor: "#2a1f00",
     atmosphereColor: "#6b4f00",
+    color2: "#f0c040",
+    ringColor: "",
+    moonColor: "",
+    hasMoon: false,
+    visualType: 4,
     tools: ["Apache Airflow", "ETL Pipelines", "Knowledge Graphs", "Process Mining"],
     orbitRadius: 4.7,
     orbitSpeed: 0.22,
@@ -70,6 +95,11 @@ const skillsData = [
     color: "#4ab8b8",
     planetColor: "#0a2020",
     atmosphereColor: "#0f4040",
+    color2: "#60dede",
+    ringColor: "",
+    moonColor: "#204060",
+    hasMoon: true,
+    visualType: 5,
     tools: ["Distributed Systems", "SAGA Pattern", "System Design", "JIRA", "QGIS"],
     orbitRadius: 5.4,        // outermost
     orbitSpeed: 0.22,
@@ -78,52 +108,286 @@ const skillsData = [
   },
 ]
 
+// ──────────────────────────────────────────────────────────────────────────────
+// GLSL — Planet Surface Shader
+// ──────────────────────────────────────────────────────────────────────────────
+
+const PLANET_VERT = /* glsl */`
+  varying vec3 vWorldNormal;
+  varying vec3 vWorldPos;
+  varying vec3 vObjPos;
+  void main() {
+    vWorldNormal = normalize((modelMatrix * vec4(normal, 0.0)).xyz);
+    vec4 wp = modelMatrix * vec4(position, 1.0);
+    vWorldPos = wp.xyz;
+    vObjPos = position;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`
+
+const PLANET_FRAG = /* glsl */`
+  uniform float uTime;
+  uniform vec3  uDark;
+  uniform vec3  uLight;
+  uniform vec3  uGlow;
+  uniform float uHov;
+  uniform float uType;
+
+  varying vec3 vWorldNormal;
+  varying vec3 vWorldPos;
+  varying vec3 vObjPos;
+
+  float hash3(vec3 p) {
+    p = fract(p * vec3(0.1031, 0.1030, 0.0973));
+    p += dot(p, p.yxz + 19.19);
+    return fract((p.x + p.y) * p.z);
+  }
+  float n3(vec3 p) {
+    vec3 i = floor(p); vec3 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(
+      mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x), mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x), f.y),
+      mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x), mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x), f.y),
+      f.z);
+  }
+  float fbm5(vec3 p){float v=0.0,a=0.5;vec3 s=vec3(100.0);for(int i=0;i<5;i++){v+=a*n3(p);p=p*2.1+s;a*=0.48;}return v;}
+  float fbm4(vec3 p){float v=0.0,a=0.5;vec3 s=vec3(100.0);for(int i=0;i<4;i++){v+=a*n3(p);p=p*2.1+s;a*=0.48;}return v;}
+  float fbm3(vec3 p){float v=0.0,a=0.5;vec3 s=vec3(100.0);for(int i=0;i<3;i++){v+=a*n3(p);p=p*2.1+s;a*=0.48;}return v;}
+
+  vec3 pRockyGreen(vec3 p) {
+    float t  = fbm5(p * 4.2);
+    float cr = fbm3(p * 9.0 + vec3(5.7, 3.1, 2.4));
+    vec3 c   = mix(uDark, mix(uDark, uLight, 0.5), smoothstep(0.28, 0.55, t));
+    c        = mix(c, uLight, smoothstep(0.55, 0.80, t));
+    c        = mix(c, uDark * 0.28, smoothstep(0.73, 0.84, cr) * 0.65);
+    c       += uLight * 0.15 * smoothstep(0.78, 0.92, t);
+    return c;
+  }
+  vec3 pOcean(vec3 p) {
+    float t   = fbm5(p * 2.8);
+    float cl  = fbm4(p * 5.0 + vec3(uTime * 0.018, 0.0, uTime * 0.013));
+    vec3 deep = uDark;
+    vec3 mid  = mix(uDark, uLight, 0.38);
+    vec3 land = mix(vec3(0.09,0.19,0.04), vec3(0.14,0.26,0.07), t);
+    vec3 c    = mix(deep, mid, smoothstep(0.36, 0.52, t));
+    c         = mix(c, land, smoothstep(0.54, 0.68, t));
+    c         = mix(c, vec3(0.88, 0.93, 1.0), smoothstep(0.62, 0.78, cl) * 0.68);
+    return c;
+  }
+  vec3 pCrystal(vec3 p) {
+    float t  = fbm5(p * 5.0);
+    float f2 = fbm3(p * 10.5 + vec3(1.7, 4.2, 3.1));
+    float f3 = fbm3(p * 15.0 + vec3(7.3, 2.1, 5.8));
+    vec3 c   = mix(uDark, uLight, t * 0.65);
+    c       += uLight * smoothstep(0.66, 0.88, f2) * 0.58;
+    c       += vec3(1.0) * smoothstep(0.80, 0.96, f3) * 0.22;
+    return c;
+  }
+  vec3 pGasOrange(vec3 p) {
+    float b1 = sin(p.y * 20.0 + fbm4(p * 2.0) * 3.5 + uTime * 0.05) * 0.5 + 0.5;
+    float b2 = sin(p.y * 12.0 - fbm3(p * 3.0 + vec3(1.0)) * 2.5 + uTime * 0.03) * 0.5 + 0.5;
+    float st = fbm4(p * 6.5 + vec3(0.0, 0.0, uTime * 0.01));
+    vec3 c   = mix(uDark, uLight, b1 * 0.68);
+    c        = mix(c, mix(uDark, uLight * 1.3, 0.4), b2 * 0.38);
+    c        = mix(c, uLight * 1.55, smoothstep(0.72, 0.87, st) * 0.52);
+    return c;
+  }
+  vec3 pLava(vec3 p) {
+    float rock = fbm5(p * 4.0);
+    float cr   = 1.0 - fbm4(p * 7.0 + vec3(3.3, 1.8, 2.7));
+    vec3 c     = mix(uDark * 0.60, uDark, rock);
+    c          = mix(c, uLight * 1.9, smoothstep(0.58, 0.74, cr) * 0.80);
+    c         += uLight * smoothstep(0.80, 0.96, cr) * 2.4;
+    return c;
+  }
+  vec3 pGasTeal(vec3 p) {
+    float b1 = sin(p.y * 16.0 + fbm4(p * 2.5) * 3.0 + uTime * 0.028) * 0.5 + 0.5;
+    float sw = fbm4(p * 4.5 + vec3(uTime * 0.016, 0.0, uTime * 0.011));
+    vec3 c   = mix(uDark, uLight, b1 * 0.58);
+    c        = mix(c, uLight * 1.40, sw * smoothstep(0.54, 0.80, b1) * 0.44);
+    return c;
+  }
+
+  void main() {
+    vec3 np = normalize(vObjPos);
+    vec3 surf;
+    if      (uType < 0.5) surf = pRockyGreen(np);
+    else if (uType < 1.5) surf = pOcean(np);
+    else if (uType < 2.5) surf = pCrystal(np);
+    else if (uType < 3.5) surf = pGasOrange(np);
+    else if (uType < 4.5) surf = pLava(np);
+    else                  surf = pGasTeal(np);
+
+    vec3 N  = normalize(vWorldNormal);
+    vec3 L  = normalize(vec3(0.73, 0.55, 0.37));
+    vec3 V  = normalize(cameraPosition - vWorldPos);
+    vec3 H  = normalize(L + V);
+    float NdL    = dot(N, L);
+    float diff   = max(0.0, NdL);
+    float shadow = smoothstep(-0.30, 0.38, NdL);
+    float amb    = 0.10;
+    float spow = (uType < 0.5 || uType > 3.5) ? 10.0 : 28.0;
+    float sstr = (uType < 0.5 || uType > 3.5) ? 0.10 : 0.24;
+    float spec = pow(max(0.0, dot(N, H)), spow) * sstr;
+    float fres = pow(1.0 - max(0.0, dot(N, V)), 2.6);
+    float lavaEmit = 0.0;
+    if (uType > 3.5 && uType < 4.5) {
+      float cr = 1.0 - fbm4(np * 7.0 + vec3(3.3, 1.8, 2.7));
+      lavaEmit = smoothstep(0.75, 0.92, cr) * 0.58;
+    }
+    vec3 col = surf * (amb + diff * shadow * 0.90);
+    col += vec3(0.86, 0.92, 1.0) * spec;
+    col += uGlow * fres * (0.28 + uHov * 0.42);
+    col += surf * lavaEmit;
+    col *= 1.0 + uHov * 0.13;
+    gl_FragColor = vec4(clamp(col, 0.0, 3.0), 1.0);
+  }
+`
+
+const ATMO_VERT = /* glsl */`
+  varying vec3 vNormal;
+  varying vec3 vWorldPos;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    vec4 wp = modelMatrix * vec4(position, 1.0);
+    vWorldPos = wp.xyz;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`
+
+const ATMO_FRAG = /* glsl */`
+  uniform vec3  uGlow;
+  uniform float uHov;
+  uniform float uTime;
+  varying vec3 vNormal;
+  varying vec3 vWorldPos;
+  void main() {
+    vec3 V    = normalize(cameraPosition - vWorldPos);
+    float rim = 1.0 - max(0.0, dot(normalize(-vNormal), V));
+    rim = pow(rim, 1.65);
+    float pulse = 1.0 + sin(uTime * 1.3) * 0.07 * uHov;
+    float alpha = rim * (0.30 + uHov * 0.30) * pulse;
+    gl_FragColor = vec4(uGlow * (1.1 + uHov * 0.40), alpha);
+  }
+`
+
 // ─── Procedural Planet Material ────────────────────────────────────────────────
-function PlanetMaterial({ baseColor, emitColor, isHovered }: {
-  baseColor: string
-  emitColor: string
-  isHovered: boolean
+function PlanetMaterial({
+  colDark, colLight, colGlow, isHovered, pType,
+}: {
+  colDark: string; colLight: string; colGlow: string; isHovered: boolean; pType: number
 }) {
-  const matRef = useRef<THREE.MeshStandardMaterial>(null)
+  const mat = useMemo(() => new THREE.ShaderMaterial({
+    uniforms: {
+      uTime:  { value: 0 },
+      uDark:  { value: new THREE.Color(colDark) },
+      uLight: { value: new THREE.Color(colLight) },
+      uGlow:  { value: new THREE.Color(colGlow) },
+      uHov:   { value: 0 },
+      uType:  { value: pType },
+    },
+    vertexShader:   PLANET_VERT,
+    fragmentShader: PLANET_FRAG,
+  }), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useFrame((state) => {
-    if (matRef.current) {
-      matRef.current.emissiveIntensity = isHovered
-        ? 0.35 + Math.sin(state.clock.elapsedTime * 3) * 0.1
-        : 0.08
-    }
+    mat.uniforms.uTime.value = state.clock.elapsedTime
+    mat.uniforms.uHov.value  = THREE.MathUtils.lerp(
+      mat.uniforms.uHov.value,
+      isHovered ? 1.0 : 0.0,
+      0.07
+    )
   })
 
-  return (
-    <meshStandardMaterial
-      ref={matRef}
-      color={baseColor}
-      emissive={emitColor}
-      emissiveIntensity={0.08}
-      roughness={0.82}
-      metalness={0.05}
-    />
-  )
+  return <primitive object={mat} attach="material" />
 }
 
 // ─── Atmosphere Glow Ring ──────────────────────────────────────────────────────
 function AtmosphereGlow({ size, color, isHovered }: { size: number; color: string; isHovered: boolean }) {
-  const ringRef = useRef<THREE.Mesh>(null)
+  const mat = useMemo(() => new THREE.ShaderMaterial({
+    uniforms: {
+      uGlow: { value: new THREE.Color(color) },
+      uHov:  { value: 0 },
+      uTime: { value: 0 },
+    },
+    vertexShader:   ATMO_VERT,
+    fragmentShader: ATMO_FRAG,
+    transparent:    true,
+    side:           THREE.BackSide,
+    blending:       THREE.AdditiveBlending,
+    depthWrite:     false,
+  }), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useFrame((state) => {
-    if (ringRef.current) {
-      const mat = ringRef.current.material as THREE.MeshBasicMaterial
-      mat.opacity = isHovered
-        ? 0.18 + Math.sin(state.clock.elapsedTime * 2.5) * 0.06
-        : 0.06
+    mat.uniforms.uTime.value = state.clock.elapsedTime
+    mat.uniforms.uHov.value  = THREE.MathUtils.lerp(
+      mat.uniforms.uHov.value,
+      isHovered ? 1.0 : 0.0,
+      0.07
+    )
+  })
+
+  return (
+    <mesh scale={[1.30, 1.30, 1.30]}>
+      <sphereGeometry args={[size, 32, 32]} />
+      <primitive object={mat} attach="material" />
+    </mesh>
+  )
+}
+
+// ─── Planet Rings (Saturn-like, Languages planet) ──────────────────────────────
+function PlanetRings({ size, color }: { size: number; color: string }) {
+  return (
+    <group rotation={[Math.PI * 0.23, 0.0, Math.PI * 0.07]}>
+      <mesh>
+        <ringGeometry args={[size * 1.55, size * 2.05, 80]} />
+        <meshBasicMaterial color={color} transparent opacity={0.48} side={THREE.DoubleSide} depthWrite={false} />
+      </mesh>
+      <mesh>
+        <ringGeometry args={[size * 2.12, size * 2.65, 80]} />
+        <meshBasicMaterial color={color} transparent opacity={0.22} side={THREE.DoubleSide} depthWrite={false} />
+      </mesh>
+      <mesh>
+        <ringGeometry args={[size * 2.68, size * 3.10, 80]} />
+        <meshBasicMaterial color={color} transparent opacity={0.08} side={THREE.DoubleSide} depthWrite={false} />
+      </mesh>
+    </group>
+  )
+}
+
+// ─── Orbiting Moon (Backend → purple, Architecture → dark blue) ────────────────
+function Moon({ parentSize, moonColor }: { parentSize: number; moonColor: string }) {
+  const groupRef = useRef<THREE.Group>(null)
+  const angleRef = useRef(Math.PI * 0.75)
+  const moonSize = parentSize * 0.22
+  const orbitR   = parentSize * 2.85
+
+  useFrame((_, delta) => {
+    angleRef.current += delta * 1.15
+    if (groupRef.current) {
+      groupRef.current.position.x = Math.cos(angleRef.current) * orbitR
+      groupRef.current.position.y = Math.sin(angleRef.current) * orbitR * 0.18
+      groupRef.current.position.z = Math.sin(angleRef.current) * orbitR
     }
   })
 
   return (
-    <mesh ref={ringRef}>
-      <sphereGeometry args={[size * 1.22, 24, 24]} />
-      <meshBasicMaterial color={color} transparent opacity={0.06} side={THREE.BackSide} />
-    </mesh>
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[moonSize, 20, 20]} />
+        <meshStandardMaterial
+          color={moonColor}
+          emissive={moonColor}
+          emissiveIntensity={0.22}
+          roughness={0.85}
+          metalness={0.10}
+        />
+      </mesh>
+      <mesh scale={[1.5, 1.5, 1.5]}>
+        <sphereGeometry args={[moonSize, 12, 12]} />
+        <meshBasicMaterial color={moonColor} transparent opacity={0.08} side={THREE.BackSide} depthWrite={false} />
+      </mesh>
+    </group>
   )
 }
 
@@ -169,16 +433,28 @@ function OrbitingPlanet({
         onPointerOver={(e) => { e.stopPropagation(); onHover(skill); document.body.style.cursor = "pointer" }}
         onPointerOut={() => { onHover(null); document.body.style.cursor = "auto" }}
       >
-        <sphereGeometry args={[skill.size, 48, 48]} />
+        <sphereGeometry args={[skill.size, 80, 80]} />
         <PlanetMaterial
-          baseColor={skill.planetColor}
-          emitColor={skill.color}
+          colDark={skill.planetColor}
+          colLight={skill.color2}
+          colGlow={skill.color}
           isHovered={isHovered}
+          pType={skill.visualType}
         />
       </mesh>
 
       {/* Atmosphere glow */}
-      <AtmosphereGlow size={skill.size} color={skill.atmosphereColor} isHovered={isHovered} />
+      <AtmosphereGlow size={skill.size} color={skill.color} isHovered={isHovered} />
+
+      {/* Saturn-like rings (Languages planet only) */}
+      {skill.visualType === 1 && skill.ringColor && (
+        <PlanetRings size={skill.size} color={skill.ringColor} />
+      )}
+
+      {/* Orbiting moon (Backend + Architecture) */}
+      {skill.hasMoon && skill.moonColor && (
+        <Moon parentSize={skill.size} moonColor={skill.moonColor} />
+      )}
 
       {/* Planet label */}
       <Text
@@ -197,11 +473,28 @@ function OrbitingPlanet({
 
 // ─── Orbit Ring (drawn as torus) ───────────────────────────────────────────────
 function OrbitRing() {
+  const ringRef = useRef<THREE.Mesh>(null)
+
+  useFrame((state) => {
+    if (ringRef.current) {
+      const mat = ringRef.current.material as THREE.MeshBasicMaterial
+      mat.opacity = 0.055 + Math.sin(state.clock.elapsedTime * 0.4) * 0.018
+    }
+  })
+
   return (
-    <mesh rotation={[Math.PI * 0.28, 0, 0]}>
-      <torusGeometry args={[3.4, 0.004, 8, 120]} />
-      <meshBasicMaterial color="#ffffff" transparent opacity={0.07} />
-    </mesh>
+    <group rotation={[Math.PI * 0.28, 0, 0]}>
+      <mesh ref={ringRef}>
+        <torusGeometry args={[3.4, 0.005, 8, 140]} />
+        <meshBasicMaterial color="#9b6bff" transparent opacity={0.06} />
+      </mesh>
+      {skillsData.map((s) => (
+        <mesh key={s.name}>
+          <torusGeometry args={[s.orbitRadius, 0.003, 6, 140]} />
+          <meshBasicMaterial color={s.color} transparent opacity={0.04} />
+        </mesh>
+      ))}
+    </group>
   )
 }
 
