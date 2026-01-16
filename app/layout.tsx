@@ -11,14 +11,30 @@ const sora = Sora({ subsets: ["latin"], variable: "--font-sora" })
 export const metadata: Metadata = {
   title: "CodingRI",
   description: "Inventing tomorrow's web, one line of code at a time.",
-  keywords: ["developer", "portfolio", "full-stack", "creative technologist"],
+
+  keywords: [
+    "developer",
+    "portfolio",
+    "full-stack",
+    "creative technologist",
+  ],
+
   authors: [{ name: "CodingRI" }],
+
   openGraph: {
     title: "CodingRI - Creative Technologist",
-    description: "Inventing tomorrow's web, one line of code at a time.",
+    description:
+      "Inventing tomorrow's web, one line of code at a time.",
     type: "website",
   },
-    generator: 'senotron'
+
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
+
+  generator: "senotron",
 }
 
 export default function RootLayout({
