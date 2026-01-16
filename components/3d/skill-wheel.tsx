@@ -597,7 +597,7 @@ function FallbackSkillsGrid({ skills }: { skills: typeof skillsData }) {
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-6">
       {skills.map((skill) => (
         <motion.div key={skill.name} whileHover={{ scale: 1.04 }}>
-          <Card className="border-white/10 bg-white/5">
+          <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: skill.color }} />
