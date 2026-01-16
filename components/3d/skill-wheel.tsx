@@ -695,7 +695,7 @@ export default function SkillWheel() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="text-center select-none" style={{ marginTop: "-2px" }}>
               <p className="text-[11px] tracking-[0.4em] uppercase text-white/55 font-mono">
-                tech stack
+                mind stack
               </p>
             </div>
           </div>
