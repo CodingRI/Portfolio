@@ -9,7 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, MapPin, Send, Mic, MicOff } from "lucide-react"
+import {
+  Mail, Phone, MapPin, Send, Mic, MicOff, Github,
+  Linkedin,
+  Twitter,
+} from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export default function ContactSection() {
@@ -67,9 +71,9 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            <Card className="glass-morphism border-white/20">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">💬 Send a Message</CardTitle>
+                <CardTitle className="flex items-center gap-2">Send a Message</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -108,9 +112,8 @@ export default function ContactSection() {
                       variant="ghost"
                       size="sm"
                       onClick={toggleRecording}
-                      className={`absolute top-2 right-2 ${
-                        isRecording ? "text-red-400 animate-pulse" : "text-white/60"
-                      }`}
+                      className={`absolute top-2 right-2 ${isRecording ? "text-red-400 animate-pulse" : "text-white/60"
+                        }`}
                     >
                       {isRecording ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
                     </Button>
@@ -130,94 +133,161 @@ export default function ContactSection() {
           </motion.div>
 
           {/* Contact Info & AI Assistant */}
+          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="space-y-6"
           >
-            {/* Contact Information */}
-            <Card className="glass-morphism border-white/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">📞 Get in Touch</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-cyan-400" />
-                  <span className="text-white/80">john.doe@example.com</span>
+            <Card
+              className="
+      relative overflow-hidden
+      border-white/10
+
+      bg-[linear-gradient(180deg,rgba(15,23,42,0.78)_0%,rgba(2,6,23,0.92)_100%)]
+
+      shadow-[0_0_60px_rgba(34,211,238,0.08)]
+
+      hover:border-cyan-400/20
+    "
+            >
+              {/* Ambient glow */}
+              <div
+                className="
+        absolute inset-0 opacity-40
+        bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_55%)]
+        pointer-events-none
+      "
+              />
+
+              <CardContent className="p-8 relative z-10">
+                {/* Header */}
+                <div className="mb-8">
+
+                  <p
+                    className="
+          text-white/65
+          leading-relaxed
+          text-base
+          "
+                  >
+                    Whether you have a project idea, a collaboration opportunity,
+                    or just want to connect and talk about tech, design, or the future
+                    of the web — my inbox is always open.
+                    <br />
+                    <br />
+                    I enjoy building meaningful digital experiences and connecting with
+                    people who are passionate about creating things that matter.
+                  </p>
                 </div>
+                <h3
+                  className="
+              text-3xl md:text-4xl
+              font-bold
+              mb-4
+  
+              bg-gradient-to-r
+              from-white
+              via-cyan-100
+              to-cyan-300
+  
+              bg-clip-text
+              text-transparent
+            "
+                >
+                  Get In Touch
+                </h3>
 
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-green-400" />
-                  <span className="text-white/80">+1 (555) 123-4567</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-5 w-5 text-purple-400" />
-                  <span className="text-white/80">San Francisco, CA</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Assistant */}
-            <Card className="glass-morphism border-white/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">🤖 AI Assistant</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400 flex items-center justify-center text-sm">
-                      AI
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-white/80 text-sm">
-                        Hi! I'm John's AI assistant. I can help answer questions about his experience, schedule
-                        meetings, or provide project details. What would you like to know?
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="bg-white/10 text-white cursor-pointer hover:bg-white/20">
-                      Tell me about John's experience
-                    </Badge>
-                    <Badge variant="secondary" className="bg-white/10 text-white cursor-pointer hover:bg-white/20">
-                      What technologies does he use?
-                    </Badge>
-                    <Badge variant="secondary" className="bg-white/10 text-white cursor-pointer hover:bg-white/20">
-                      Schedule a meeting
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Social Links */}
-            <Card className="glass-morphism border-white/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">🌐 Connect Online</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
+                {/* Social Buttons */}
+                <div className="grid grid-cols-2 gap-4 mb-10">
                   {[
-                    { name: "GitHub", icon: "🐙", color: "hover:text-gray-400" },
-                    { name: "LinkedIn", icon: "💼", color: "hover:text-blue-400" },
-                    { name: "Twitter", icon: "🐦", color: "hover:text-cyan-400" },
-                    { name: "Discord", icon: "🎮", color: "hover:text-purple-400" },
+                    {
+                      name: "GitHub",
+                      href: "https://github.com/CodingRI/",
+                      icon: Github,
+                      glow: "hover:shadow-[0_0_30px_rgba(255,255,255,0.12)]",
+                    },
+                    {
+                      name: "LinkedIn",
+                      href: "https://www.linkedin.com/in/riya-karmakar-7204a4256/",
+                      icon: Linkedin,
+                      glow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.18)]",
+                    },
+                    {
+                      name: "X / Twitter",
+                      href: "https://x.com/RI_2507",
+                      icon: Twitter,
+                      glow: "hover:shadow-[0_0_30px_rgba(34,211,238,0.16)]",
+                    },
+                    {
+                      name: "Email",
+                      href: "mailto:karmakarriya462@gmail.com.com",
+                      icon: Mail,
+                      glow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.16)]",
+                    },
                   ].map((social) => (
                     <motion.a
                       key={social.name}
-                      href="#"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`flex items-center gap-2 p-3 rounded-lg glass-morphism border border-white/10 text-white/80 transition-colors ${social.color}`}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{
+                        scale: 1.03,
+                        y: -2,
+                      }}
+                      whileTap={{ scale: 0.97 }}
+                      className={`
+              group relative overflow-hidden
+
+              flex items-center gap-3
+
+              rounded-2xl
+              border border-white/10
+
+              bg-white/[0.03]
+              backdrop-blur-xl
+
+              px-5 py-4
+
+              text-white/80
+
+              transition-all duration-500
+
+              hover:border-cyan-400/20
+              hover:bg-cyan-400/[0.04]
+
+              ${social.glow}
+            `}
                     >
-                      <span className="text-lg">{social.icon}</span>
-                      <span>{social.name}</span>
+                      {/* Glow layer */}
+                      <div
+                        className="
+                absolute inset-0 opacity-0
+                transition-opacity duration-500
+                group-hover:opacity-100
+
+                bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_70%)]
+              "
+                      />
+
+                      <social.icon
+                        className="
+                h-5 w-5
+                text-cyan-300
+                transition-transform duration-500
+                group-hover:scale-110
+              "
+                      />
+
+                      <span className="relative z-10 font-medium tracking-wide">
+                        {social.name}
+                      </span>
                     </motion.a>
                   ))}
                 </div>
+
+                {/* Contact Details */}
+
               </CardContent>
             </Card>
           </motion.div>
@@ -231,7 +301,7 @@ export default function ContactSection() {
           className="mt-20 pt-8 border-t border-white/10 text-center"
         >
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-white/60">© 2025 John Doe. Crafted with ❤️ and cutting-edge tech.</div>
+            <div className="text-white/60">© 2026 CodingRI.</div>
 
             <div className="flex items-center gap-4">
               <div className="w-16 h-1 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full animate-pulse" />
@@ -243,3 +313,69 @@ export default function ContactSection() {
     </section>
   )
 }
+
+
+{/* <div
+        className="
+          rounded-2xl
+          border border-white/10
+
+          bg-white/[0.02]
+
+          p-5
+
+          space-y-5
+        "
+      >
+        <div className="flex items-center gap-4">
+          <div
+            className="
+              flex items-center justify-center
+
+              w-11 h-11
+              rounded-xl
+
+              bg-cyan-400/10
+              border border-cyan-400/10
+            "
+          >
+            <Mail className="h-5 w-5 text-cyan-300" />
+          </div>
+
+          <div>
+            <p className="text-sm text-white/40 mb-1">
+              Email
+            </p>
+
+            <p className="text-white/80">
+              karmakarriya462@gmail.com
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div
+            className="
+              flex items-center justify-center
+
+              w-11 h-11
+              rounded-xl
+
+              bg-purple-400/10
+              border border-purple-400/10
+            "
+          >
+            <MapPin className="h-5 w-5 text-purple-300" />
+          </div>
+
+          <div>
+            <p className="text-sm text-white/40 mb-1">
+              Location
+            </p>
+
+            <p className="text-white/80">
+              Chandigarh, India
+            </p>
+          </div>
+        </div>
+      </div> */}
