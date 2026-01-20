@@ -88,6 +88,11 @@ export default function HeroSection() {
               size="lg"
               className="glass-morphism hover:animate-glow text-white border-cyan-400 hover:border-cyan-300 px-8 py-4 text-lg bg-transparent"
               variant="outline"
+              onClick={() =>
+                document
+                  .getElementById("about")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               <Rocket className="mr-2 h-5 w-5" />Explore My Universe
             </Button>
@@ -95,8 +100,16 @@ export default function HeroSection() {
               size="lg"
               className="glass-morphism hover:animate-glow text-white border-purple-400 hover:border-purple-300 px-8 py-4 text-lg bg-transparent"
               variant="outline"
+              asChild
             >
-              <Download className="mr-2 h-5 w-5" />Download Resume
+              {/* ↓ Replace the href value with your Google Drive shareable link */}
+              <a
+                href="https://drive.google.com/file/d/1-Q4v29N6DwNm07bG04PLZnrAmSq7tLSs/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Download className="mr-2 h-5 w-5" />Download Resume
+              </a>
             </Button>
           </motion.div>
         </motion.div>
