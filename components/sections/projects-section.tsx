@@ -17,7 +17,7 @@ export default function ProjectsSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Developer Galaxy</h2>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Project Constellations</h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
             Navigate my project universe — each constellation maps a skill domain. Hover to illuminate, click a star to explore the story behind it.
           </p>
