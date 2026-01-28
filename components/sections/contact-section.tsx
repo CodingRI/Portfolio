@@ -107,16 +107,6 @@ export default function ContactSection() {
                       required
                     />
 
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={toggleRecording}
-                      className={`absolute top-2 right-2 ${isRecording ? "text-red-400 animate-pulse" : "text-white/60"
-                        }`}
-                    >
-                      {isRecording ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
-                    </Button>
                   </div>
 
                   <Button
