@@ -88,7 +88,7 @@ export default function BlogSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6 }}
                 >
-                  <Card className="glass-morphism border-white/20 hover:border-cyan-400/50 transition-all duration-300">
+                  <Card>
                     <CardContent className="p-0">
                       <div className="grid md:grid-cols-3 gap-4">
                         <div className="md:col-span-1">
@@ -152,7 +152,7 @@ export default function BlogSection() {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6 }}
                 >
-                  <Card className="glass-morphism border-white/20 hover:border-purple-400/50 transition-all duration-300">
+                  <Card>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-2">
                         <h4 className="text-lg font-bold text-white">{project.name}</h4>
@@ -181,9 +181,9 @@ export default function BlogSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              <Card className="glass-morphism border-white/20">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">📊 Contribution Activity</CardTitle>
+                  <CardTitle className="flex items-center gap-2">📊 Contribution Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-12 gap-1">
