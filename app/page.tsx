@@ -14,7 +14,6 @@ export default function Home() {
       <AboutSection />
       <ProjectsSection />
       <SkillsSection />
-      <BlogSection />
       <ContactSection />
     </main>
   )
