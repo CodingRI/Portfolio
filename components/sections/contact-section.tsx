@@ -15,9 +15,11 @@ import {
   Twitter,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { sendContactEmail } from "@/app/actions/contact"
 
 export default function ContactSection() {
   const [isRecording, setIsRecording] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,27 +29,34 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    toast({
-      title: "Message sent! 🚀",
-      description: "Thanks for reaching out. I'll get back to you soon!",
-    })
-
-    setFormData({ name: "", email: "", message: "" })
-  }
-
-  const toggleRecording = () => {
-    setIsRecording(!isRecording)
-    if (!isRecording) {
+    try {
+      const res = await sendContactEmail(formData)
+      if (res.success) {
+        toast({
+          title: "Message sent!",
+          description: "Thanks for reaching out. I'll get back to you soon!",
+        })
+        setFormData({ name: "", email: "", message: "" })
+      } else {
+        toast({
+          title: "Error",
+          description: res.error || "Failed to send message.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
       toast({
-        title: "Voice input activated 🎤",
-        description: "Speak your message and I'll transcribe it for you!",
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
+
 
   return (
     <section id="contact" className="py-20 relative">
@@ -111,11 +120,20 @@ export default function ContactSection() {
 
                   <Button
                     type="submit"
-                    className="w-full glass-morphism border-cyan-400 text-cyan-400 hover:bg-cyan-400/20 hover:animate-glow"
+                    className="w-full glass-morphism border border-cyan-400 text-cyan-400 hover:bg-cyan-400/20 hover:animate-glow"
                     size="lg"
+                    disabled={isSubmitting}
                   >
-                    <Send className="mr-2 h-5 w-5" />
-                    Send Message
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <span className="animate-spin border-2 border-cyan-400/20 border-t-cyan-400 rounded-full h-5 w-5"></span>
+                        Sending...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Send className="h-5 w-5" /> Send Message
+                      </span>
+                    )}
                   </Button>
                 </form>
               </CardContent>

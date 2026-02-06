@@ -8,6 +8,28 @@ import ParticleBackground from "@/components/3d/particle-background"
 import HolographicAvatar from "@/components/3d/holographic-avatar"
 import { isWebGLSupported } from "@/lib/webgl-utils"
 
+const TypewriterText = ({ text, delay = 100 }: { text: string; delay?: number }) => {
+  const [currentText, setCurrentText] = useState("")
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+    const timeout = setTimeout(() => {
+        setCurrentText((prevText) => prevText + text[currentIndex])
+        setCurrentIndex((prevIndex) => prevIndex + 1)
+      }, delay)
+    return () => clearTimeout(timeout)
+    }
+  }, [currentIndex, delay, text])
+
+  return (
+    <span className="inline-flex items-center">
+      {currentText}
+      <span className="animate-pulse border-r-4 border-cyan-400 h-[1em] ml-1"></span>
+    </span>
+  )
+}
+
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [webglSupported, setWebglSupported] = useState(true)
@@ -39,8 +61,8 @@ export default function HeroSection() {
         </motion.div>
       )}
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center">
+      {/* Main Content */}
+      <div className="container mx-auto px-6 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -62,9 +84,9 @@ export default function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="text-6xl md:text-8xl font-bold mb-6 liquid-gradient font-sora"
+            className="text-6xl md:text-8xl font-bold mb-6 liquid-gradient font-sora min-h-[1.2em]"
           >
-            CodingRI
+            <TypewriterText text="I'm CodingRI" delay={150} />
           </motion.h1>
 
           {/* Subheading */}
@@ -74,7 +96,7 @@ export default function HeroSection() {
             transition={{ delay: 1, duration: 0.8 }}
             className="text-xl md:text-2xl text-white/80 mb-8 font-light"
           >
-            Inventing tomorrow's web, one line of code at a time.
+            I build robust software to solve real problems. Driven by curiosity, pragmatism, and a passion for making things that matter.
           </motion.p>
 
           {/* CTA Buttons */}
