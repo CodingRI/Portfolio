@@ -8,7 +8,7 @@ import Navigation from "@/components/navigation"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white overflow-x-hidden">
+    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navigation />
       <HeroSection />
       <AboutSection />
