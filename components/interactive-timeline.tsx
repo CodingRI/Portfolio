@@ -63,7 +63,7 @@ export default function InteractiveTimeline() {
           via-cyan-300/60
           to-purple-500/10
 
-          shadow-[0_0_25px_rgba(34,211,238,0.35)]
+          shadow-[0_0_25px_rgba(146,144,195,0.35)]
           rounded-full
         "
       />
@@ -109,7 +109,7 @@ export default function InteractiveTimeline() {
                     border-white/10
                     hover:border-cyan-400/20
                     bg-white/[0.03]
-                    hover:shadow-[0_0_60px_rgba(34,211,238,0.16)]
+                    hover:shadow-[0_0_60px_rgba(146,144,195,0.16)]
                   "
                 >
                   <CardContent className="p-5 md:p-7">
@@ -186,9 +186,9 @@ export default function InteractiveTimeline() {
                 whileHover={{ scale: 1.2 }}
                 className="
                   relative w-7 h-7 rounded-full
-                  bg-[radial-gradient(circle_at_top,#67e8f9,#7c3aed)]
+                  bg-[radial-gradient(circle_at_top,#9290C3,#1B1A55)]
                   border border-cyan-300/40
-                  shadow-[0_0_25px_rgba(34,211,238,0.55)]
+                  shadow-[0_0_25px_rgba(146,144,195,0.55)]
                   before:absolute before:inset-[-8px]
                   before:rounded-full
                   before:border before:border-cyan-400/10
@@ -229,7 +229,7 @@ export default function InteractiveTimeline() {
                 className="
                   w-full max-h-[85vh] overflow-y-auto
                   border-white/10
-                  shadow-[0_0_90px_rgba(34,211,238,0.14)]
+                  shadow-[0_0_90px_rgba(146,144,195,0.14)]
                 "
               >
                 <CardContent className="p-6 md:p-8">
