@@ -32,10 +32,10 @@ export default function HolographicAvatar() {
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400/20 via-purple-500/20 to-pink-500/20 blur-xl animate-pulse" />
 
           {/* Inner planet surface */}
-          <div className="absolute inset-[6px] rounded-full bg-[radial-gradient(circle_at_top,#1e293b_0%,#0f172a_45%,#020617_100%)] border border-white/10 shadow-[inset_0_0_25px_rgba(255,255,255,0.06)]" />
+          <div className="absolute inset-[6px] rounded-full bg-[radial-gradient(circle_at_top,#1B1A55_0%,#070F2B_45%,#0F0F0F_100%)] border border-white/10 shadow-[inset_0_0_25px_rgba(255,255,255,0.06)]" />
 
           {/* Atmospheric glow */}
-          <div className="absolute inset-0 rounded-full border border-cyan-400/20 shadow-[0_0_35px_rgba(34,211,238,0.25)]" />
+          <div className="absolute inset-0 rounded-full border border-cyan-400/20 shadow-[0_0_35px_rgba(146,144,195,0.25)]" />
 
           {/* Tiny stars texture */}
           <div className="absolute inset-0 opacity-30">
@@ -46,7 +46,7 @@ export default function HolographicAvatar() {
           </div>
 
           {/* Main Letter */}
-          <div className="relative z-10 text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-500 drop-shadow-[0_0_18px_rgba(34,211,238,0.45)] select-none">
+          <div className="relative z-10 text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-500 drop-shadow-[0_0_18px_rgba(146,144,195,0.45)] select-none">
             R
           </div>
 
