@@ -42,7 +42,7 @@ const PROJECTS: Project[] = [
   },
   {
     id: 2,
-    name: "Manim Video Generator",
+    name: "Manim Studio",
     description:
       "An automated pipeline for generating high-quality math tutorial videos using Manim animation engine with version controlled scenes, an intelligent rendering queue, and a fine-tuned LLM brain.",
     technologies: ["Node.js", "Python", "Manim", "Docker", "ffmpeg", "Postgres", "Redis", "OpenRouter"],
@@ -94,7 +94,7 @@ const PROJECTS: Project[] = [
   },
   {
     id: 5,
-    name: "Algo Arena",
+    name: "AlgoArena",
     description:
       "Real-time collaborative extension for LeetCode problem solving — features live chat, shared code views, WebSocket sync, and state management with Zustand.",
     technologies: ["React", "Node.js", "WebSockets", "Zustand", "Docker"],
