@@ -151,22 +151,22 @@ export default function ContactSection() {
           >
             <Card
               className="
-      h-full
-      relative overflow-hidden
-      border-white/10
+       h-full
+       relative overflow-hidden
+       border-white/10
 
-      bg-[linear-gradient(180deg,rgba(15,23,42,0.78)_0%,rgba(2,6,23,0.92)_100%)]
+       bg-[linear-gradient(180deg,rgba(15,15,15,0.78)_0%,rgba(7,15,43,0.92)_100%)]
 
-      shadow-[0_0_60px_rgba(34,211,238,0.08)]
+       shadow-[0_0_60px_rgba(146,144,195,0.08)]
 
-      hover:border-cyan-400/20
-    "
+       hover:border-cyan-400/20
+     "
             >
               {/* Ambient glow */}
               <div
                 className="
         absolute inset-0 opacity-40
-        bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_55%)]
+        bg-[radial-gradient(circle_at_top,rgba(146,144,195,0.08),transparent_55%)]
         pointer-events-none
       "
               />
@@ -218,15 +218,15 @@ export default function ContactSection() {
                     },
                     {
                       name: "LinkedIn",
-                      href: "https://www.linkedin.com/in/riya-karmakar-7204a4256/",
+                      href: "https://www.linkedin.com/in/ri002/",
                       icon: Linkedin,
                       glow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.18)]",
                     },
                     {
                       name: "X",
-                      href: "https://x.com/RI_2507",
+                      href: "https://x.com/RI_00K2",
                       icon: Twitter,
-                      glow: "hover:shadow-[0_0_30px_rgba(34,211,238,0.16)]",
+                      glow: "hover:shadow-[0_0_30px_rgba(146,144,195,0.16)]",
                     },
                     {
                       name: "Email",
@@ -274,8 +274,8 @@ export default function ContactSection() {
                 absolute inset-0 opacity-0
                 transition-opacity duration-500
                 group-hover:opacity-100
-
-                bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_70%)]
+ 
+                bg-[radial-gradient(circle_at_top,rgba(146,144,195,0.08),transparent_70%)]
               "
                       />
 
@@ -314,7 +314,7 @@ export default function ContactSection() {
 
             <div className="flex items-center gap-4">
               <div className="w-16 h-1 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full animate-pulse" />
-              <span className="text-white/40 text-sm">Powered by Next.js & Three.js</span>
+              <span className="text-white/40 text-sm">Powered by Me & my mind</span>
             </div>
           </div>
         </motion.footer>
