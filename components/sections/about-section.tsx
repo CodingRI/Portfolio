@@ -16,7 +16,7 @@ export default function AboutSection() {
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">About Me</h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-I build digital products where solid engineering meets great design. I’m all about taking complex, ambitious ideas, wiring up the intelligent systems underneath, and turning them into tools that just feel natural to use.
+          I am not some cracked genius :/ but if there is something on my mind to build or fix, you will find me with a cup of coffee infront of my screen in the most darkest corner around me, at anytime of the day.
           </p>
         </motion.div>
 
