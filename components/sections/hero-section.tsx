@@ -96,7 +96,7 @@ export default function HeroSection() {
             transition={{ delay: 1, duration: 0.8 }}
             className="text-xl md:text-2xl text-white/80 mb-8 font-light"
           >
-            I build robust software to solve real problems. Driven by curiosity, pragmatism, and a passion for making things that matter.
+            I feel easier to talk to machines than to people and I will choose my laptop over you :)
           </motion.p>
 
           {/* CTA Buttons */}
