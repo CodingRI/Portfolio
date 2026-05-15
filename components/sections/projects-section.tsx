@@ -16,7 +16,7 @@ export default function ProjectsSection() {
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Project Constellations</h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Navigate my project universe — each constellation is a project. Click a label or a tech star to explore the story behind it.
+            Navigate my crafts — each constellation is something I built I thought needs an existance. I have a favourite one, it's in purple hehe ;)
           </p>
         </motion.div>
 
