@@ -45,7 +45,7 @@ export default function CurrentlyLearningWidget() {
           className="mt-6 p-3 rounded-lg bg-gradient-to-r from-purple-400/20 to-cyan-400/20 border border-white/10"
         >
           <div className="flex items-center gap-2 mb-2">
-            <Zap className="h-4 w-4 text-yellow-400" />
+            <Zap className="h-4 w-4 text-cyan-300" />
             <span className="text-white font-semibold">Next Up:</span>
           </div>
           <div className="text-white/80">Exploring scalable backend system architectures</div>
