@@ -38,19 +38,19 @@ export default function LiveGitHubWidget() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Github className="h-5 w-5 text-green-400" />
+          <Github className="h-5 w-5 text-cyan-400" />
           Currently Building AlgoArena 
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <motion.div whileHover={{ scale: 1.05 }} className="text-center p-3 rounded-lg bg-white/5">
-            <div className="text-2xl font-bold text-green-400">{githubData.commits}</div>
+            <div className="text-2xl font-bold text-cyan-300">{githubData.commits}</div>
             <div className="text-sm text-white/60">Total Commits</div>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} className="text-center p-3 rounded-lg bg-white/5">
-            <div className="text-2xl font-bold text-yellow-400">{githubData.stars}</div>
+            <div className="text-2xl font-bold text-cyan-400">{githubData.stars}</div>
             <div className="text-sm text-white/60">Stars Earned</div>
           </motion.div>
         </div>
@@ -60,7 +60,7 @@ export default function LiveGitHubWidget() {
             <GitCommit className="h-4 w-4 text-cyan-400" />
             <span className="text-white/80">Last commit:</span>
           </div>
-          <Badge variant="secondary" className="bg-green-400/20 text-green-400">
+          <Badge variant="secondary" className="bg-cyan-400/10 text-cyan-300">
             {githubData.lastCommit}
           </Badge>
         </div>
