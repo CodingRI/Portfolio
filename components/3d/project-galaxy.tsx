@@ -29,8 +29,8 @@ const PROJECTS: Project[] = [
     name: "Nourishwell",
     description:
       "A health and wellness platform with dynamic diet planning, animated nutrient charts, and a clean modern UI for nutritionist professionals.",
-    technologies: ["React", "Chart.js", "CSS Modules", "Firebase"],
-    techStarPositions: [[-0.28, -0.22], [0.22, -0.28], [0.30, 0.16], [-0.18, 0.28]],
+    technologies: ["Next.js", "Postgres", "Clerk", "React Native", "Prisma"],
+    techStarPositions: [[-0.28, -0.22], [0.22, -0.28], [0.30, 0.16], [-0.18, 0.28], [-0.08, -0.32]],
     github: "https://github.com/CodingRI/nutritionist_portfolio",
     demo: "https://nourishwell.in/",
     year: "2026",
@@ -81,8 +81,8 @@ const PROJECTS: Project[] = [
     name: "Electrade",
     description:
       "Open-source CLI toolkit that automates project scaffolding, dependency audits, and cross-environment deployment pipelines. Contributed to the Electrade project.",
-    technologies: ["Node.js", "TypeScript", "Commander.js", "Ink"],
-    techStarPositions: [[-0.26, -0.20], [0.24, -0.22], [0.26, 0.18], [-0.18, 0.26]],
+    technologies: ["Node.js", "TypeScript", "ethers.js", "pinata/sdk", "Material UI"],
+    techStarPositions: [[-0.26, -0.20], [0.24, -0.22], [0.26, 0.18], [-0.18, 0.26], [0.08, 0.32]],
     github: "https://github.com/CodingRI/elecTrade",
     demo: "https://shreyavishesh.github.io/elecTrade/",
     year: "2024",
@@ -258,27 +258,27 @@ function useGalaxyCanvas(
     const cx = lw / 2
     const cy = lh / 2
 
-    // Background
+    // Background — slightly lighter centre for better depth
     const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(lw, lh) * 0.75)
-    bg.addColorStop(0,    "#050a16")
-    bg.addColorStop(0.45, "#02040a")
-    bg.addColorStop(1,    "#010208")
+    bg.addColorStop(0,    "#070d1e")
+    bg.addColorStop(0.45, "#03060e")
+    bg.addColorStop(1,    "#01030a")
     ctx.fillStyle = bg
     ctx.fillRect(0, 0, lw, lh)
 
-    // Nebula clouds — one per project colour
-    drawNebula(ctx, cx * 0.45, cy * 0.42, 180, "rgba(249,115,22,",  t * 0.07)
-    drawNebula(ctx, cx * 1.55, cy * 0.42, 175, "rgba(168,85,247,",  t * 0.05 + 1)
-    drawNebula(ctx, cx,        cy * 1.55, 160, "rgba(6,182,212,",   t * 0.06 + 2)
-    drawNebula(ctx, cx * 0.42, cy * 1.55, 155, "rgba(34,197,94,",   t * 0.04 + 3)
-    drawNebula(ctx, cx * 1.55, cy * 1.55, 165, "rgba(244,63,94,",   t * 0.05 + 4)
-    drawNebula(ctx, cx,        cy * 0.42, 150, "rgba(234,179,8,",   t * 0.06 + 5)
-    drawNebula(ctx, cx,        cy,        90,  "rgba(180,160,255,",  t * 0.03)
+    // Nebula clouds — boosted opacity ~8% for better visibility on dim screens
+    drawNebula(ctx, cx * 0.45, cy * 0.42, 195, "rgba(249,115,22,",  t * 0.07)
+    drawNebula(ctx, cx * 1.55, cy * 0.42, 190, "rgba(168,85,247,",  t * 0.05 + 1)
+    drawNebula(ctx, cx,        cy * 1.55, 175, "rgba(6,182,212,",   t * 0.06 + 2)
+    drawNebula(ctx, cx * 0.42, cy * 1.55, 170, "rgba(34,197,94,",   t * 0.04 + 3)
+    drawNebula(ctx, cx * 1.55, cy * 1.55, 180, "rgba(244,63,94,",   t * 0.05 + 4)
+    drawNebula(ctx, cx,        cy * 0.42, 165, "rgba(234,179,8,",   t * 0.06 + 5)
+    drawNebula(ctx, cx,        cy,        105, "rgba(180,160,255,",  t * 0.03)
 
     // Background stars
     ctx.save()
     for (const p of particlesRef.current) {
-      const twinkle = 0.45 + 0.55 * Math.sin(t * p.twinkleSpeed + p.phase)
+      const twinkle = 0.52 + 0.48 * Math.sin(t * p.twinkleSpeed + p.phase)
       const alpha = p.opacity * twinkle
       if (p.r < 0.8) {
         ctx.fillStyle = `rgba(255,255,255,${alpha})`
@@ -372,13 +372,19 @@ function useGalaxyCanvas(
         ctx.fillStyle = sg
         ctx.fill()
 
-        // Tech label below star
-        const fontSize = isHovered ? 10 : 8
-        ctx.font = `${isHovered ? 600 : 400} ${fontSize}px Inter, system-ui, sans-serif`
-        ctx.fillStyle = isHovered ? "#ffffff" : `${project.glowColor}0.7)`
+        // Tech label below star — larger & brighter for non-retina readability
+        const fontSize = isHovered ? 12 : 10
+        ctx.font = `${isHovered ? 700 : 500} ${fontSize}px Inter, system-ui, sans-serif`
+        // White text with a subtle shadow for contrast on dark backgrounds
+        if (!isHovered) {
+          ctx.shadowColor = `${project.color}`
+          ctx.shadowBlur = 4
+        }
+        ctx.fillStyle = isHovered ? "#ffffff" : `${project.glowColor}0.92)`
         ctx.textAlign = "center"
         ctx.textBaseline = "top"
         ctx.fillText(star.techLabel, Math.round(star.lx), Math.round(star.ly + visualR + 5))
+        ctx.shadowBlur = 0
         ctx.textBaseline = "alphabetic"
       }
 
@@ -420,9 +426,10 @@ function useGalaxyCanvas(
   }, [])
 
   function drawNebula(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, col: string, phase: number) {
-    const opacity = 0.03 + 0.015 * Math.sin(phase)
+    // Raised base opacity from 0.03 → 0.055 for ~8% stronger ambient
+    const opacity = 0.055 + 0.02 * Math.sin(phase)
     const g = ctx.createRadialGradient(x, y, 0, x, y, r)
-    g.addColorStop(0,   `${col}${(opacity * 3).toFixed(3)})`)
+    g.addColorStop(0,   `${col}${(opacity * 2.8).toFixed(3)})`)
     g.addColorStop(0.5, `${col}${opacity.toFixed(3)})`)
     g.addColorStop(1,   `${col}0)`)
     ctx.beginPath()
@@ -435,10 +442,11 @@ function useGalaxyCanvas(
     const pulse = Math.sin(t * 1.2) * 0.15
     const outerR = 65 + pulse * 25
 
+    // Stronger corona so the centre reads on dim monitors
     const corona = ctx.createRadialGradient(cx, cy, 0, cx, cy, outerR)
-    corona.addColorStop(0,   "rgba(220,200,255,0.2)")
-    corona.addColorStop(0.3, "rgba(168,85,247,0.08)")
-    corona.addColorStop(0.7, "rgba(6,182,212,0.04)")
+    corona.addColorStop(0,   "rgba(220,200,255,0.28)")
+    corona.addColorStop(0.3, "rgba(168,85,247,0.12)")
+    corona.addColorStop(0.7, "rgba(6,182,212,0.06)")
     corona.addColorStop(1,   "rgba(0,0,0,0)")
     ctx.beginPath()
     ctx.arc(cx, cy, outerR, 0, Math.PI * 2)
@@ -450,31 +458,32 @@ function useGalaxyCanvas(
     ctx.rotate(t * 0.15)
     ctx.beginPath()
     ctx.arc(0, 0, 30, 0, Math.PI * 2)
-    ctx.strokeStyle = `rgba(168,85,247,${0.18 + 0.08 * Math.sin(t * 2)})`
-    ctx.lineWidth = 0.8
+    ctx.strokeStyle = `rgba(168,85,247,${0.28 + 0.1 * Math.sin(t * 2)})`
+    ctx.lineWidth = 1.0
     ctx.setLineDash([4, 8])
     ctx.stroke()
     ctx.setLineDash([])
     ctx.restore()
 
     const inner = ctx.createRadialGradient(cx, cy, 0, cx, cy, 18 + pulse * 6)
-    inner.addColorStop(0,   "rgba(255,255,255,0.95)")
-    inner.addColorStop(0.3, "rgba(200,170,255,0.7)")
-    inner.addColorStop(0.7, "rgba(168,85,247,0.3)")
+    inner.addColorStop(0,   "rgba(255,255,255,0.98)")
+    inner.addColorStop(0.3, "rgba(210,185,255,0.8)")
+    inner.addColorStop(0.7, "rgba(168,85,247,0.4)")
     inner.addColorStop(1,   "rgba(168,85,247,0)")
     ctx.beginPath()
     ctx.arc(cx, cy, 18 + pulse * 6, 0, Math.PI * 2)
     ctx.fillStyle = inner
     ctx.fill()
 
-    ctx.font = "bold 12px Inter, system-ui, sans-serif"
-    ctx.fillStyle = "rgba(220,200,255,0.9)"
+    // Brighter, larger core labels
+    ctx.font = "bold 13px Inter, system-ui, sans-serif"
+    ctx.fillStyle = "rgba(235,220,255,1.0)"
     ctx.textAlign = "center"
     ctx.textBaseline = "alphabetic"
-    ctx.fillText("RI Universe", Math.round(cx), Math.round(cy + 38))
-    ctx.font = "400 9px Inter, system-ui, sans-serif"
-    ctx.fillStyle = "rgba(180,160,255,0.55)"
-    ctx.fillText("Full Stack Developer", Math.round(cx), Math.round(cy + 52))
+    ctx.fillText("RI's Universe", Math.round(cx), Math.round(cy + 40))
+    ctx.font = "500 10px Inter, system-ui, sans-serif"
+    ctx.fillStyle = "rgba(190,170,255,0.85)"
+    ctx.fillText("Software Developer", Math.round(cx), Math.round(cy + 55))
   }
 
   function drawOrbitRings(ctx: CanvasRenderingContext2D, cx: number, cy: number, _t: number) {
@@ -482,8 +491,9 @@ function useGalaxyCanvas(
     for (let i = 0; i < radii.length; i++) {
       ctx.beginPath()
       ctx.arc(cx, cy, radii[i], 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(100,80,200,${0.055 - i * 0.008})`
-      ctx.lineWidth = 0.7
+      // Slightly brighter rings for better visibility
+      ctx.strokeStyle = `rgba(120,100,220,${0.08 - i * 0.01})`
+      ctx.lineWidth = 0.8
       ctx.setLineDash([3, 11])
       ctx.stroke()
       ctx.setLineDash([])
@@ -650,6 +660,14 @@ function ProjectDetailCard({
   onClose: () => void
 }) {
   const [pos, setPos] = useState({ top: 0, right: 0 })
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   useEffect(() => {
     if (!anchorRef.current) return
@@ -670,47 +688,76 @@ function ProjectDetailCard({
     }
   }, [anchorRef])
 
+  // Mobile: animate from bottom as a sheet; Desktop: slide from right
+  const mobileStyle: React.CSSProperties = {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: "auto",
+    transform: "none",
+    zIndex: 9999,
+    width: "100%",
+    maxHeight: "72vh",
+    overflowY: "auto",
+    background: "rgba(8,6,22,0.97)",
+    backdropFilter: "blur(28px)",
+    WebkitBackdropFilter: "blur(28px)",
+    border: `1px solid ${project.color}40`,
+    borderRadius: "20px 20px 0 0",
+    boxShadow: `0 -8px 60px ${project.color}25, 0 0 0 1px rgba(255,255,255,0.05)`,
+  }
+
+  const desktopStyle: React.CSSProperties = {
+    position: "fixed",
+    top: pos.top,
+    right: pos.right,
+    transform: "translateY(-50%)",
+    zIndex: 9999,
+    width: 320,
+    maxHeight: "80vh",
+    overflowY: "auto",
+    background: "rgba(8,6,22,0.95)",
+    backdropFilter: "blur(28px)",
+    WebkitBackdropFilter: "blur(28px)",
+    border: `1px solid ${project.color}40`,
+    borderRadius: 20,
+    boxShadow: `0 0 48px ${project.color}28, 0 24px 64px rgba(0,0,0,0.6)`,
+  }
+
   return createPortal(
     <motion.div
       key={project.id}
-      initial={{ opacity: 0, x: 48, scale: 0.94 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      exit={{ opacity: 0, x: 48, scale: 0.92 }}
+      initial={isMobile ? { opacity: 0, y: 80 } : { opacity: 0, x: 48, scale: 0.94 }}
+      animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0, scale: 1 }}
+      exit={isMobile ? { opacity: 0, y: 80 } : { opacity: 0, x: 48, scale: 0.92 }}
       transition={{ type: "spring", damping: 26, stiffness: 280 }}
-      style={{
-        position: "fixed",
-        top: pos.top,
-        right: pos.right,
-        transform: "translateY(-50%)",
-        zIndex: 9999,
-        width: 320,
-        maxHeight: "80vh",
-        overflowY: "auto",
-        background: "rgba(8,6,22,0.92)",
-        backdropFilter: "blur(28px)",
-        WebkitBackdropFilter: "blur(28px)",
-        border: `1px solid ${project.color}35`,
-        borderRadius: 20,
-        boxShadow: `0 0 48px ${project.color}22, 0 24px 64px rgba(0,0,0,0.6)`,
-      }}
+      style={isMobile ? mobileStyle : desktopStyle}
     >
       {/* Top accent line */}
       <div
         style={{
-          height: 2,
+          height: 3,
           borderRadius: "20px 20px 0 0",
           background: `linear-gradient(90deg, transparent, ${project.color}, transparent)`,
         }}
       />
 
-      <div style={{ padding: 20 }}>
+      {/* Mobile drag-handle hint */}
+      {isMobile && (
+        <div style={{ display: "flex", justifyContent: "center", paddingTop: 8 }}>
+          <div style={{ width: 40, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.2)" }} />
+        </div>
+      )}
+
+      <div style={{ padding: isMobile ? "16px 20px 28px" : 20 }}>
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
           <div
             style={{
               width: 38, height: 38, borderRadius: 12,
               display: "flex", alignItems: "center", justifyContent: "center",
-              background: `${project.color}18`, border: `1px solid ${project.color}35`,
+              background: `${project.color}22`, border: `1px solid ${project.color}45`,
               color: project.color,
             }}
           >
@@ -719,10 +766,10 @@ function ProjectDetailCard({
           <button
             onClick={onClose}
             style={{
-              width: 26, height: 26, borderRadius: "50%",
+              width: 28, height: 28, borderRadius: "50%",
               display: "flex", alignItems: "center", justifyContent: "center",
-              background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)",
-              border: "none", cursor: "pointer",
+              background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.75)",
+              border: "1px solid rgba(255,255,255,0.12)", cursor: "pointer",
             }}
           >
             <X size={12} />
@@ -740,33 +787,34 @@ function ProjectDetailCard({
             style={{
               display: "inline-flex", alignItems: "center", gap: 4,
               padding: "3px 9px", borderRadius: 999, fontSize: 10,
-              fontWeight: 600, background: `${project.color}15`,
-              border: `1px solid ${project.color}30`, color: project.color,
+              fontWeight: 600, background: `${project.color}20`,
+              border: `1px solid ${project.color}40`, color: project.color,
             }}
           >
             {project.icon}
             {project.year}
           </span>
+          {/* Brighter role badge */}
           <span
             style={{
               display: "inline-flex", alignItems: "center", gap: 4,
               padding: "3px 9px", borderRadius: 999, fontSize: 10,
-              fontWeight: 500, background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.55)",
+              fontWeight: 500, background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.82)",
             }}
           >
             {project.role}
           </span>
         </div>
 
-        {/* Description */}
-        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.62)", lineHeight: 1.65, marginBottom: 16 }}>
+        {/* Description — brighter for readability */}
+        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.78)", lineHeight: 1.65, marginBottom: 16 }}>
           {project.description}
         </p>
 
         {/* Tech stack */}
         <div style={{ marginBottom: 16 }}>
-          <p style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.35)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
+          <p style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.55)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
             Tech Stack
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -874,33 +922,36 @@ function ConstellationLabels({
               top: pos.y,
               transform: "translate(-50%, -100%)",
               cursor: "pointer",
-              padding: "4px 12px",
+              padding: "5px 13px",
               borderRadius: 999,
-              fontSize: 11,
+              // Slightly larger font for non-retina legibility
+              fontSize: 12,
               fontWeight: 700,
-              letterSpacing: "0.04em",
-              color: isSelected ? "#fff" : pos.color,
+              letterSpacing: "0.05em",
+              // Brighter text: full white when selected, project colour at full opacity otherwise
+              color: isSelected ? "#ffffff" : pos.color,
               background: isSelected
-                ? `${pos.color}30`
-                : `rgba(8,6,22,0.7)`,
-              border: `1px solid ${pos.color}${isSelected ? "80" : "45"}`,
-              backdropFilter: "blur(8px)",
+                ? `${pos.color}38`
+                : `rgba(4,3,14,0.78)`,
+              border: `1px solid ${pos.color}${isSelected ? "90" : "60"}`,
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
               boxShadow: isSelected
-                ? `0 0 18px ${pos.color}50, 0 0 6px ${pos.color}30`
-                : `0 0 8px ${pos.color}20`,
+                ? `0 0 22px ${pos.color}55, 0 0 8px ${pos.color}35`
+                : `0 0 10px ${pos.color}30, inset 0 0 0 1px ${pos.color}10`,
               zIndex: 10,
               pointerEvents: "auto",
               whiteSpace: "nowrap",
               transition: "background 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s",
               display: "flex",
               alignItems: "center",
-              gap: 5,
+              gap: 6,
             }}
           >
             <span style={{
-              width: 6, height: 6, borderRadius: "50%",
+              width: 7, height: 7, borderRadius: "50%",
               background: pos.color,
-              boxShadow: `0 0 6px ${pos.color}`,
+              boxShadow: `0 0 7px ${pos.color}`,
               display: "inline-block",
               flexShrink: 0,
             }} />
@@ -942,20 +993,22 @@ function StarTooltip({ star }: { star: StarNode }) {
 
 function GalaxyLegend({ selectedProjectId }: { selectedProjectId: number | null }) {
   return (
-    <div className="absolute bottom-5 left-5 z-20 flex flex-col gap-2">
+    // Hidden on very small screens — takes too much space
+    <div className="absolute bottom-5 left-5 z-20 flex-col gap-1.5 hidden sm:flex">
       {PROJECTS.map((project) => {
         const isActive = selectedProjectId === null || selectedProjectId === project.id
         return (
           <div
             key={project.id}
             className="flex items-center gap-2 transition-opacity duration-300"
-            style={{ opacity: isActive ? 1 : 0.28 }}
+            style={{ opacity: isActive ? 1 : 0.3 }}
           >
             <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: project.color, boxShadow: `0 0 5px ${project.color}` }}
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ background: project.color, boxShadow: `0 0 6px ${project.color}` }}
             />
-            <span className="text-xs font-medium" style={{ color: project.color }}>
+            {/* Brighter legend text */}
+            <span className="text-xs font-semibold" style={{ color: project.color }}>
               {project.name}
             </span>
           </div>
@@ -973,28 +1026,32 @@ function HUDOverlay({ projectCount }: { projectCount: number }) {
       <div
         className="absolute top-4 left-4 z-20 px-3 py-2 rounded-xl text-xs font-mono"
         style={{
-          background: "rgba(8,6,22,0.75)",
-          border: "1px solid rgba(168,85,247,0.22)",
-          backdropFilter: "blur(10px)",
-          color: "rgba(200,180,255,0.7)",
+          background: "rgba(8,6,22,0.82)",
+          border: "1px solid rgba(168,85,247,0.32)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          // Brighter HUD text
+          color: "rgba(215,195,255,0.92)",
         }}
       >
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <span>GALAXY MAP ACTIVE</span>
         </div>
-        <div style={{ color: "rgba(140,120,200,0.45)" }}>
+        <div style={{ color: "rgba(170,150,230,0.75)" }}>
           {projectCount} STAR SYSTEMS DETECTED
         </div>
       </div>
 
+      {/* Hidden on small screens to avoid clutter */}
       <div
-        className="absolute top-4 right-4 z-20 px-3 py-2 rounded-xl text-xs font-mono text-right"
+        className="absolute top-4 right-4 z-20 px-3 py-2 rounded-xl text-xs font-mono text-right hidden sm:block"
         style={{
-          background: "rgba(8,6,22,0.75)",
-          border: "1px solid rgba(6,182,212,0.18)",
-          backdropFilter: "blur(10px)",
-          color: "rgba(180,220,255,0.45)",
+          background: "rgba(8,6,22,0.82)",
+          border: "1px solid rgba(6,182,212,0.28)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          color: "rgba(185,225,255,0.75)",
         }}
       >
         <div>COORD: RI Universe</div>
@@ -1038,59 +1095,76 @@ export default function ProjectGalaxy() {
   )
 
   return (
-    <div ref={containerRef} className="relative w-full h-full rounded-2xl" style={{ minHeight: 560, background: "#02040a" }}>
-      <canvas
-        ref={canvasRef}
-        className="block rounded-2xl"
-        onMouseMove={handleMouseMove}
-        onClick={handleClick}
-        onMouseLeave={() => setHoveredStar(null)}
-        style={{ width: "100%", height: "100%", display: "block" }}
-      />
+    // Scroll-triggered fade-in matching other sections
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.75, ease: "easeOut" }}
+      className="w-full h-full"
+    >
+      <div
+        ref={containerRef}
+        className="relative w-full h-full rounded-2xl"
+        style={{
+          // Mobile: shorter, desktop: full height
+          minHeight: "clamp(360px, 55vw, 700px)",
+          background: "#02040a",
+        }}
+      >
+        <canvas
+          ref={canvasRef}
+          className="block rounded-2xl"
+          onMouseMove={handleMouseMove}
+          onClick={handleClick}
+          onMouseLeave={() => setHoveredStar(null)}
+          style={{ width: "100%", height: "100%", display: "block" }}
+        />
 
-      {/* Clickable project label buttons overlaid on the canvas */}
-      <ConstellationLabels
-        constellationsRef={constellationsRef}
-        selectedProjectId={selectedProjectId}
-        onSelect={handleLabelClick}
-        canvasRef={canvasRef}
-      />
+        {/* Clickable project label buttons overlaid on the canvas */}
+        <ConstellationLabels
+          constellationsRef={constellationsRef}
+          selectedProjectId={selectedProjectId}
+          onSelect={handleLabelClick}
+          canvasRef={canvasRef}
+        />
 
-      {/* Tooltip */}
-      <AnimatePresence>
-        {hoveredStar && !selectedProject && (
-          <StarTooltip key={hoveredStar.id} star={hoveredStar} />
-        )}
-      </AnimatePresence>
+        {/* Tooltip */}
+        <AnimatePresence>
+          {hoveredStar && !selectedProject && (
+            <StarTooltip key={hoveredStar.id} star={hoveredStar} />
+          )}
+        </AnimatePresence>
 
-      {/* Detail card — portal to document.body */}
-      <AnimatePresence>
-        {mounted && selectedProject && (
-          <ProjectDetailCard
-            key={selectedProject.id}
-            project={selectedProject}
-            anchorRef={containerRef}
-            onClose={() => setSelectedProjectId(null)}
-          />
-        )}
-      </AnimatePresence>
+        {/* Detail card — portal to document.body */}
+        <AnimatePresence>
+          {mounted && selectedProject && (
+            <ProjectDetailCard
+              key={selectedProject.id}
+              project={selectedProject}
+              anchorRef={containerRef}
+              onClose={() => setSelectedProjectId(null)}
+            />
+          )}
+        </AnimatePresence>
 
-      <GalaxyLegend selectedProjectId={selectedProjectId} />
-      <HUDOverlay projectCount={PROJECTS.length} />
+        <GalaxyLegend selectedProjectId={selectedProjectId} />
+        <HUDOverlay projectCount={PROJECTS.length} />
 
-      <AnimatePresence>
-        {!selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute bottom-5 right-5 z-20 text-xs font-mono pointer-events-none"
-            style={{ color: "rgba(180,160,255,0.3)" }}
-          >
-            ◎ click a star or label to explore
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        <AnimatePresence>
+          {!selectedProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute bottom-5 right-5 z-20 text-xs font-mono pointer-events-none hidden sm:block"
+              style={{ color: "rgba(190,170,255,0.5)" }}
+            >
+              ◎ click a star or label to explore
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   )
 }
