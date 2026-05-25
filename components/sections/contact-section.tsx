@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import {
   Mail, Phone, MapPin, Send, Mic, MicOff, Github,
   Linkedin,
-  Twitter,
+  Twitter, 
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { sendContactEmail } from "@/app/actions/contact"
@@ -67,9 +67,9 @@ export default function ContactSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Let's Connect</h2>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 liquid-gradient font-sora">Wanna Connect?</h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Ready to bring your ideas to life? Let's discuss how we can create something amazing together.
+            Pretty antisocial being, but if you wanna discuss systems, architecture or have a cool problem to solve, I'm all in!
           </p>
         </motion.div>
 
@@ -79,13 +79,14 @@ export default function ContactSection() {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
+            className="h-full"
           >
-            <Card>
+            <Card className="h-full flex flex-col">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">Send a Message</CardTitle>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+              <CardContent className="flex-1 flex flex-col">
+                <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
                   <div>
                     <Input
                       placeholder="Your Name"
@@ -107,12 +108,12 @@ export default function ContactSection() {
                     />
                   </div>
 
-                  <div className="relative">
+                  <div className="relative flex-1 flex flex-col">
                     <Textarea
                       placeholder="Your Message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="glass-morphism border-white/20 text-white placeholder:text-white/50 min-h-32"
+                      className="glass-morphism border-white/20 text-white placeholder:text-white/50 flex-1 min-h-48 resize-none"
                       required
                     />
 
@@ -146,9 +147,11 @@ export default function ContactSection() {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
+            className="h-full"
           >
             <Card
               className="
+      h-full
       relative overflow-hidden
       border-white/10
 
@@ -179,18 +182,16 @@ export default function ContactSection() {
           text-base
           "
                   >
-                    Whether you have a project idea, a collaboration opportunity,
-                    or just want to connect and talk about tech, design, or the future
-                    of the web — my inbox is always open.
+                   Intelligence is dying in this era of AI, so we gotta keep up. My motto is to
+                   solve problems from first principles. First we make it exist and then make it better.
                     <br />
                     <br />
-                    I enjoy building meaningful digital experiences and connecting with
-                    people who are passionate about creating things that matter.
+                    That's why I build, fail and rebuild until my brain.exe fries up, because that's when you know you're alive!
                   </p>
                 </div>
-                <h3
+                <h2
                   className="
-              text-3xl md:text-4xl
+              text-2xl md:text-3xl
               font-bold
               mb-4
   
@@ -204,10 +205,10 @@ export default function ContactSection() {
             "
                 >
                   Get In Touch
-                </h3>
+                </h2>
 
                 {/* Social Buttons */}
-                <div className="grid grid-cols-2 gap-4 mb-10">
+                <div className="grid grid-cols-2 gap-3 mb-2">
                   {[
                     {
                       name: "GitHub",
@@ -222,14 +223,14 @@ export default function ContactSection() {
                       glow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.18)]",
                     },
                     {
-                      name: "X / Twitter",
+                      name: "X",
                       href: "https://x.com/RI_2507",
                       icon: Twitter,
                       glow: "hover:shadow-[0_0_30px_rgba(34,211,238,0.16)]",
                     },
                     {
                       name: "Email",
-                      href: "mailto:karmakarriya462@gmail.com.com",
+                      href: "karmakarriya462@gmail.com",
                       icon: Mail,
                       glow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.16)]",
                     },

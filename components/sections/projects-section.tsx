@@ -20,8 +20,10 @@ export default function ProjectsSection() {
           </p>
         </motion.div>
 
-        <div className="h-[700px] w-full rounded-2xl"
+        <div
+          className="w-full rounded-2xl"
           style={{
+            height: "clamp(360px, 55vw, 700px)",
             border: "1px solid rgba(168,85,247,0.12)",
             boxShadow: "0 0 80px rgba(100,60,200,0.1), inset 0 0 80px rgba(0,0,0,0.3)",
           }}
