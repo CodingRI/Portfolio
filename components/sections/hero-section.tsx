@@ -126,7 +126,7 @@ export default function HeroSection() {
             >
               {/* ↓ Replace the href value with your Google Drive shareable link */}
               <a
-                href="https://drive.google.com/file/d/1-Q4v29N6DwNm07bG04PLZnrAmSq7tLSs/view?usp=sharing"
+                href="https://drive.google.com/file/d/1nhpQy0il7HcDiwjq3AymMUJObQlupExV/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
               >
