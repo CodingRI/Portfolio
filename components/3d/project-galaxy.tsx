@@ -113,13 +113,13 @@ const PROJECTS: Project[] = [
     name: "AWS Nav Extension",
     description:
       "Real-time AI-powered chat extension to navigate complex AWS service trees using RAG, LangChain, and an OpenRouter-backed language model.",
-    technologies: ["React", "Node.js", "OpenRouter API", "LangChain", "RAG", "WebSocket"],
+    technologies: ["React", "Node.js", "OpenRouter API", "Express 5", "RAG", "Manifest V3"],
     techStarPositions: [
       [-0.28, -0.20], [0.26, -0.20], [0.28, 0.18],
       [-0.18, 0.26],  [0.10, 0.32], [-0.10, -0.30],
     ],
     github: "https://github.com/CodingRI/AWS-nav-extenstion",
-    demo: "https://demo.com",
+    demo: "https://www.loom.com/share/1bb662a403494936b89e45c47d5db73e",
     year: "2025",
     role: "Personal Project",
     color: "#eab308",
