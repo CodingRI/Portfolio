@@ -4,7 +4,6 @@ import { Inter, Sora } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora" })
@@ -50,7 +49,6 @@ export default function RootLayout({
           {children}
           <Toaster />
         </ThemeProvider>
-        <Analytics />
       </body>
     </html>
   )
