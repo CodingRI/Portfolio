@@ -15,6 +15,7 @@ interface Project {
   techStarPositions: [number, number][]
   github: string
   demo: string
+  demoLabel?: string
   year: string
   role: string
   color: string
@@ -96,11 +97,12 @@ const PROJECTS: Project[] = [
     id: 5,
     name: "AlgoArena",
     description:
-      "Real-time collaborative extension for LeetCode problem solving — features live chat, shared code views, WebSocket sync, and state management with Zustand.",
-    technologies: ["React", "Node.js", "WebSockets", "Zustand", "Docker"],
-    techStarPositions: [[-0.28, -0.20], [0.24, -0.22], [0.28, 0.16], [-0.16, 0.26], [0.08, 0.30]],
+      "Real-time collaborative extension for LeetCode problem solving — features live chat, voice & excalidraw overlay on top of leetcode",
+    technologies: ["React", "Node.js", "Golang", "WebSockets", "Zustand", "Docker"],
+    techStarPositions: [[-0.28, -0.20], [0.24, -0.22],[-0.26, -0.20], [0.28, 0.16], [-0.16, 0.26], [0.08, 0.30]],
     github: "https://github.com/CodingRI/AlgoArena",
-    demo: "https://demo.com",
+    demo: "https://chromewebstore.google.com/detail/algoarena/ffpanonmccohmalhiobgingcldadgneo?utm_source=item-share-cb",
+    demoLabel: "Download",
     year: "2025",
     role: "Personal Project",
     color: "#f43f5e",
@@ -858,7 +860,7 @@ function ProjectDetailCard({
             }}
           >
             <ExternalLink size={13} />
-            Live Demo
+            {project.demoLabel ?? "Live Demo"}
           </motion.a>
         </div>
       </div>
