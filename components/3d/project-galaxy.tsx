@@ -14,7 +14,7 @@ interface Project {
   technologies: string[]
   techStarPositions: [number, number][]
   github: string
-  demo: string
+  site: string
   demoLabel?: string
   year: string
   role: string
@@ -33,7 +33,7 @@ const PROJECTS: Project[] = [
     technologies: ["Next.js", "Postgres", "Clerk", "React Native", "Prisma"],
     techStarPositions: [[-0.28, -0.22], [0.22, -0.28], [0.30, 0.16], [-0.18, 0.28], [-0.08, -0.32]],
     github: "https://github.com/CodingRI/nutritionist_portfolio",
-    demo: "https://nourishwell.in/",
+    site: "https://nourishwell.in/",
     year: "2026",
     role: "Full Stack Developer",
     color: "#f97316",
@@ -53,7 +53,7 @@ const PROJECTS: Project[] = [
       [0.18, -0.32],  [-0.12, -0.35],
     ],
     github: "https://github.com/CodingRI/AI-manim-video-generator",
-    demo: "https://manim-studio.codingri.dev/",
+    site: "https://manim-studio.codingri.dev/",
     year: "2026",
     role: "Personal Project",
     color: "#a855f7",
@@ -63,14 +63,15 @@ const PROJECTS: Project[] = [
   },
   {
     id: 3,
-    name: "Portfolio",
+    name: "TracePilot",
     description:
-      "A cinematic developer portfolio with immersive 3D elements, galaxy-themed project visualization, and smooth micro-animations built for maximum impact.",
-    technologies: ["Next.js", "TypeScript", "Three.js", "Framer Motion", "TailwindCSS"],
+      "A lightweight, framework-agnostic observability and tracing SDK engineered specifically for AI agents.",
+    technologies: ["SDK", "TypeScript", "OpenTelemetry", "Vitest", "tsup"],
     techStarPositions: [[-0.26, -0.20], [0.24, -0.24], [0.28, 0.18], [-0.18, 0.26], [0.08, 0.32]],
-    github: "https://github.com/CodingRI",
-    demo: "#",
-    year: "2024",
+    github: "https://github.com/CodingRI/TracePilot",
+    site: "https://www.npmjs.com/package/@codingri/tracepilot",
+    demoLabel: "Registry",
+    year: "2026",
     role: "Designer & Developer",
     color: "#06b6d4",
     glowColor: "rgba(6,182,212,",
@@ -85,7 +86,7 @@ const PROJECTS: Project[] = [
     technologies: ["Node.js", "TypeScript", "ethers.js", "pinata/sdk", "Material UI"],
     techStarPositions: [[-0.26, -0.20], [0.24, -0.22], [0.26, 0.18], [-0.18, 0.26], [0.08, 0.32]],
     github: "https://github.com/CodingRI/elecTrade",
-    demo: "https://shreyavishesh.github.io/elecTrade/",
+    site: "https://shreyavishesh.github.io/elecTrade/",
     year: "2024",
     role: "Project Contributor",
     color: "#22c55e",
@@ -99,9 +100,9 @@ const PROJECTS: Project[] = [
     description:
       "Real-time collaborative extension for LeetCode problem solving — features live chat, voice & excalidraw overlay on top of leetcode",
     technologies: ["React", "Node.js", "Golang", "WebSockets", "Zustand", "Docker"],
-    techStarPositions: [[-0.28, -0.20], [0.24, -0.22],[-0.26, -0.20], [0.28, 0.16], [-0.16, 0.26], [0.08, 0.30]],
+    techStarPositions: [[0.24, -0.22],[-0.26, -0.20], [0.28, 0.16], [-0.16, 0.26], [0.08, 0.30]],
     github: "https://github.com/CodingRI/AlgoArena",
-    demo: "https://chromewebstore.google.com/detail/algoarena/ffpanonmccohmalhiobgingcldadgneo?utm_source=item-share-cb",
+    site: "https://chromewebstore.google.com/detail/algoarena/ffpanonmccohmalhiobgingcldadgneo?utm_source=item-share-cb",
     demoLabel: "Download",
     year: "2025",
     role: "Personal Project",
@@ -121,7 +122,7 @@ const PROJECTS: Project[] = [
       [-0.18, 0.26],  [0.10, 0.32], [-0.10, -0.30],
     ],
     github: "https://github.com/CodingRI/AWS-nav-extenstion",
-    demo: "https://www.loom.com/share/1bb662a403494936b89e45c47d5db73e",
+    site: "https://www.loom.com/share/1bb662a403494936b89e45c47d5db73e",
     year: "2025",
     role: "Personal Project",
     color: "#eab308",
@@ -846,7 +847,7 @@ function ProjectDetailCard({
             GitHub
           </motion.a>
           <motion.a
-            href={project.demo}
+            href={project.site}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ y: -2, scale: 1.02 }}
